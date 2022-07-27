@@ -8,6 +8,7 @@ const client = new Client({
 });
 
 client.connect();
+const value = [process.argv[2]];
 
 client.query(`
 SELECT
@@ -19,10 +20,10 @@ FROM
   JOIN students ON students.id = student_id
   JOIN cohorts ON cohorts.id = students.cohort_id
 WHERE
-  cohorts.name =  '${process.argv[2] || 'JUL02'}'
+  cohorts.name =  $1
 ORDER BY
   teachers.name;
-`)
+`, value)
   .then(res => {
     res.rows.forEach(teachers => {
       console.log(`${teachers.cohort} ${teachers.teacher}`);
